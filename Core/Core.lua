@@ -1235,6 +1235,7 @@ function AccountantClassic_OnEvent(self, event, ...)
 	event == "BARBER_SHOP_APPEARANCE_APPLIED" or
 	event == "BARBER_SHOP_CLOSE" or
 	event == "TRANSMOGRIFY_CLOSE" or
+	event == "FORGE_MASTER_CLOSED" or
 	event == "VOID_STORAGE_CLOSE" or
 	event == "MERCHANT_CLOSED" or
 	event == "TRADE_CLOSED" or
@@ -1262,6 +1263,8 @@ function AccountantClassic_OnEvent(self, event, ...)
 		AC_LOGTYPE = "BARBER";
 	elseif event == "TRANSMOGRIFY_OPEN" then
 		AC_LOGTYPE = "TRANSMO";
+	elseif event == "FORGE_MASTER_OPENED" then
+		AC_LOGTYPE = "REFORGE";
 	elseif event == "VOID_STORAGE_OPEN" then
 		AC_LOGTYPE = "VOID";
 	elseif event == "MERCHANT_SHOW" then
