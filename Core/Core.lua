@@ -52,11 +52,29 @@ local GetAddOnMetadata = function(...)
 		return C_AddOns.GetAddOnMetadata(...)
 	end
 end
-local GetBackpackCurrencyInfo = GetBackpackCurrencyInfo or nil
-local GetCurrencyInfo = GetCurrencyInfo or nil
+local GetBackpackCurrencyInfo = function(...)
+	if _G.GetBackpackCurrencyInfo then
+		return _G.GetBackpackCurrencyInfo(...)
+	elseif C_CurrencyInfo and C_CurrencyInfo.GetBackpackCurrencyInfo then
+		local info = C_CurrencyInfo.GetBackpackCurrencyInfo(...)
+		if info then
+			return info.name, info.quantity, info.iconFileID, info.currencyTypesID
+		end
+	end
+end
+local GetCurrencyInfo = function(...)
+	if _G.GetCurrencyInfo then
+		return _G.GetCurrencyInfo(...)
+	elseif C_CurrencyInfo and C_CurrencyInfo.GetCurrencyInfo then
+		local info = C_CurrencyInfo.GetCurrencyInfo(...)
+		if info then
+			return info.name, info.quantity, info.iconFileID
+		end
+	end
+end
 
 -- Determine WoW TOC Version
-local WoWClassicEra, WoWClassicTBC, WoWWOTLKC, WoWCATAC, WoWRetail
+local WoWClassicEra, WoWClassicTBC, WoWWOTLKC, WoWCATAC, WoWMOPC, WoWRetail
 local wowversion  = select(4, GetBuildInfo())
 if wowversion < 20000 then
 	WoWClassicEra = true
@@ -66,12 +84,10 @@ elseif wowversion < 40000 then
 	WoWWOTLKC = true
 elseif wowversion < 50000 then
 	WoWCATAC = true
-	GetCurrencyInfo = C_CurrencyInfo.GetCurrencyInfo
+elseif wowversion < 60000 then
+	WoWMOPC = true
 elseif wowversion > 90000 then
 	WoWRetail = true
-
-	GetBackpackCurrencyInfo = C_CurrencyInfo.GetBackpackCurrencyInfo
-	GetCurrencyInfo = C_CurrencyInfo.GetCurrencyInfo
 else
 	-- n/a
 end
@@ -428,7 +444,7 @@ local function setLabels()
 end
 
 local function settleTabText()
-	if (WoWClassicEra or WoWClassicTBC or WoWWOTLKC or WoWCATAC) then
+	if (WoWClassicEra or WoWClassicTBC or WoWWOTLKC or WoWCATAC or WoWMOPC) then
 		local TabText = private.constants.tabText
 		for i = 1, AC_TABS do
 			local tab = _G["AccountantClassicFrameTab"..i]
@@ -1117,16 +1133,8 @@ function addon:GetFormattedValue(amount)
 end
 
 local function AccountantClassic_GetFormattedCurrency(currencyID)
-	local name, amount, icon
-	if (WoWClassicEra or WoWClassicTBC or WoWWOTLKC or WoWCATAC) then
-		name, amount, icon = GetCurrencyInfo(currencyID)
-	else
-		local info = GetCurrencyInfo(currencyID)
-		name = info.name
-		amount = info.quantity
-		icon = info.iconFileID
-	end
-	
+	local name, amount, icon = GetCurrencyInfo(currencyID)
+
 	if (amount >0) then
 		local CURRENCY_TEXTURE = "%s|T"..icon..":%d:%d:2:0|t";
 		amount = profile.breakupnumbers and BreakUpLargeNumbers(amount) or amount;

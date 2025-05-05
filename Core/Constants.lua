@@ -9,7 +9,7 @@ local GetBuildInfo = _G.GetBuildInfo
 -- Libraries
 
 -- Determine WoW TOC Version
-local WoWClassicEra, WoWClassicTBC, WoWWOTLKC, WoWCATAC, WoWRetail
+local WoWClassicEra, WoWClassicTBC, WoWWOTLKC, WoWCATAC, WoWMOPC, WoWRetail
 local wowversion  = select(4, GetBuildInfo())
 if wowversion < 20000 then
 	WoWClassicEra = true
@@ -19,6 +19,8 @@ elseif wowversion < 40000 then
 	WoWWOTLKC = true
 elseif wowversion < 50000 then
 	WoWCATAC = true
+elseif wowversion < 60000 then
+	WoWMOPC = true
 elseif wowversion > 90000 then
 	WoWRetail = true
 else
@@ -75,7 +77,7 @@ constants.defaults = {
 
 constants.logmodes = {"Session", "Day", "PrvDay", "Week", "PrvWeek", "Month", "PrvMonth", "Year", "PrvYear", "Total" }
 
-if (WoWClassicEra or WoWClassicTBC or WoWWOTLKC or WoWCATAC) then
+if (WoWClassicEra or WoWClassicTBC or WoWWOTLKC or WoWCATAC or WoWMOPC) then
 	constants.events = {
 		-- Talent
 		"CONFIRM_TALENT_WIPE",
@@ -125,7 +127,7 @@ if (WoWClassicEra or WoWClassicTBC or WoWWOTLKC or WoWCATAC) then
 		["LOOT"] = 	{ Title = LOOT};
 		["OTHER"] = 	{ Title = L["Unknown"]};
 	}
-	if WoWCATAC then
+	if WoWCATAC or WoWMOPC then
 		-- Transmog
 		constants.events[#constants.events + 1] = "TRANSMOGRIFY_OPEN";
     constants.events[#constants.events + 1] = "TRANSMOGRIFY_CLOSE";

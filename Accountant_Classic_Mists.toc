@@ -1,4 +1,4 @@
-## Interface: 11507
+## Interface: 50500
 ## Title: Accountant Classic
 ## Title-deDE: Accountant Classic
 ## Title-esES: Título
@@ -28,6 +28,7 @@
 ## X-License: GPLv2
 ## X-Category: Information
 ## X-Localizations: enUS, frFR, deDE, zhCN, zhTW, koKR, esES, ptBR, ruRU
+## IconTexture: Interface\AddOns\Accountant_Classic\Images\AccountantClassicButton-Up
 
 Libs\Libs.xml
 Locale\Locales.xml
